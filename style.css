@@ -6,3 +6,8 @@ body {
 label {
   font-weight: bold;
 }
+
+a,
+a:hover {
+  text-decoration: none;
+}
