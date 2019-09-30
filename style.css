@@ -11,3 +11,11 @@ a,
 a:hover {
   text-decoration: none;
 }
+
+.absolute-right {
+  right: 15px;
+}
+
+.front {
+  z-index: 10;
+}
