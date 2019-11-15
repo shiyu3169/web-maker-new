@@ -19,3 +19,11 @@ a:hover {
 .front {
   z-index: 10;
 }
+
+.click {
+  cursor: pointer;
+}
+
+.click i:hover {
+  color: #777777 !important;
+}
