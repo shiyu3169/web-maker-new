@@ -99,9 +99,36 @@ function App() {
     return curWebs;
   };
 
+  // getWebsite
+  const getWebsite = wid => {
+    for (let website of websites) {
+      if (website._id === wid) {
+        return website;
+      }
+    }
+  };
+
   // add new website
   const addWebsite = newWeb => {
     setWebsites([...websites, newWeb]);
+  };
+
+  // remove website
+  const removeWebsite = wid => {
+    setWebsites(websites.filter(website => website._id !== wid));
+  };
+
+  // update website
+  const updateWebsite = newWeb => {
+    setWebsites(
+      websites.map(website => {
+        if (website._id === newWeb._id) {
+          return newWeb;
+        } else {
+          return website;
+        }
+      })
+    );
   };
 
   return (
@@ -122,7 +149,14 @@ function App() {
         <Route exact path="/user/:uid/website/new">
           <WebsiteNew getWebsites={getWebsites} addWebsite={addWebsite} />
         </Route>
-        <Route exact path="/user/:uid/website/:wid" component={WebsiteEdit} />
+        <Route exact path="/user/:uid/website/:wid">
+          <WebsiteEdit
+            getWebsites={getWebsites}
+            getWebsite={getWebsite}
+            removeWebsite={removeWebsite}
+            updateWebsite={updateWebsite}
+          />
+        </Route>
         <Route exact path="/user/:uid/website/:wid/page" component={PageList} />
         <Route
           exact
