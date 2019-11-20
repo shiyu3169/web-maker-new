@@ -70,6 +70,12 @@ function App() {
     { _id: "789", name: "Chess", developerId: "234", description: "Lorem" }
   ]);
 
+  const [pages, setPages] = useState([
+    { _id: "321", name: "Post 1", websiteId: "456", title: "Lorem" },
+    { _id: "432", name: "Post 2", websiteId: "456", title: "Lorem" },
+    { _id: "543", name: "Post 3", websiteId: "456", title: "Lorem" }
+  ]);
+
   // Add a new user into users
   const addUser = user => {
     setUsers([...users, user]);
@@ -131,6 +137,43 @@ function App() {
     );
   };
 
+  // get pages by website id
+  const getPages = wid => {
+    return pages.filter(page => page.websiteId === wid);
+  };
+
+  // add new page into pages
+  const addPage = newPage => {
+    setPages([...pages, newPage]);
+  };
+
+  // get page by pid
+  const getPage = pid => {
+    for (let page of pages) {
+      if (page._id === pid) {
+        return page;
+      }
+    }
+  };
+
+  // remove Page by pid
+  const removePage = pid => {
+    setPages(pages.filter(page => page._id !== pid));
+  };
+
+  // update page
+  const updatePage = newPage => {
+    setPages(
+      pages.map(page => {
+        if (page._id === newPage._id) {
+          return newPage;
+        } else {
+          return page;
+        }
+      })
+    );
+  };
+
   return (
     <Router>
       <Switch>
@@ -157,17 +200,19 @@ function App() {
             updateWebsite={updateWebsite}
           />
         </Route>
-        <Route exact path="/user/:uid/website/:wid/page" component={PageList} />
-        <Route
-          exact
-          path="/user/:uid/website/:wid/page/new"
-          component={PageNew}
-        />
-        <Route
-          exact
-          path="/user/:uid/website/:wid/page/:pid"
-          component={PageEdit}
-        />
+        <Route exact path="/user/:uid/website/:wid/page">
+          <PageList getPages={getPages} />
+        </Route>
+        <Route exact path="/user/:uid/website/:wid/page/new">
+          <PageNew addPage={addPage} />
+        </Route>
+        <Route exact path="/user/:uid/website/:wid/page/:pid">
+          <PageEdit
+            getPage={getPage}
+            removePage={removePage}
+            updatePage={updatePage}
+          />
+        </Route>
         <Route
           exact
           path="/user/:uid/website/:wid/page/:pid/widget"
