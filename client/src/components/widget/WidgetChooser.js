@@ -1,13 +1,32 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams, useHistory } from "react-router-dom";
+import uuid from "uuid";
 
-export default function WidgetChooser() {
+export default function WidgetChooser(props) {
+  const params = useParams();
+  const history = useHistory();
+
+  const create = type => {
+    // Create new widget variable
+    const newWidget = {
+      _id: uuid.v4(),
+      widgetType: type,
+      pageId: params.pid
+    };
+    // Add new widget into widgets array
+    props.addWidget(newWidget);
+    // Navigate to widget edit page
+    history.push(
+      `/user/${params.uid}/website/${params.wid}/page/${params.pid}/widget/${newWidget._id}`
+    );
+  };
+
   return (
     <div>
       <nav className="navbar navbar-light bg-light fixed-top">
         <div>
           <Link
-            to="/user/:uid/website/:wid/page/:pid/widget"
+            to={`/user/${params.uid}/website/${params.wid}/page/${params.pid}/widget`}
             className="text-dark"
           >
             <i className="fas fa-chevron-left" />
@@ -18,9 +37,9 @@ export default function WidgetChooser() {
       <main className="container">
         <ul className="list-group list-group-flush">
           <li className="list-group-item">
-            <Link to="/user/:uid/website/:wid/page/:pid/widget/:wgid">
+            <button onClick={create.bind(this, "HEADING")} className="btn">
               Header
-            </Link>
+            </button>
           </li>
           <li className="list-group-item">
             <a href="!#">Label</a>
@@ -38,14 +57,14 @@ export default function WidgetChooser() {
             <a href="!#">Button</a>
           </li>
           <li className="list-group-item">
-            <Link to="/user/:uid/website/:wid/page/:pid/widget/:wgid">
+            <button className="btn" onClick={create.bind(this, "IMAGE")}>
               Image
-            </Link>
+            </button>
           </li>
           <li className="list-group-item">
-            <Link to="/user/:uid/website/:wid/page/:pid/widget/:wgid">
+            <button className="btn" onClick={create.bind(this, "YOUTUBE")}>
               YouTube
-            </Link>
+            </button>
           </li>
           <li className="list-group-item">
             <a href="!#">Data Table</a>
@@ -57,7 +76,7 @@ export default function WidgetChooser() {
       </main>
       <footer className="navbar navbar-light bg-light fixed-bottom">
         <span />
-        <Link to="/user/:uid">
+        <Link to={`/user/${params.uid}`}>
           <i className="fas fa-user" />
         </Link>
       </footer>

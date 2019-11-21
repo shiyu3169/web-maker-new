@@ -1,28 +1,27 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
-export default function WidgetYouTube() {
+export default function WidgetYouTube(props) {
+  const params = useParams();
+
   return (
     <div>
       <nav className="navbar navbar-light bg-light fixed-top">
         <div>
           <Link
-            to="/user/:uid/website/:wid/page/:pid/widget"
+            to={`/user/${params.uid}/website/${params.wid}/page/${params.pid}/widget`}
             className="text-dark"
           >
             <i className="fas fa-chevron-left" />
           </Link>
           <span className="navbar-brand h1 mb-0 ml-4">Edit Widget</span>
         </div>
-        <Link
-          to="/user/:uid/website/:wid/page/:pid/widget"
-          className="text-dark"
-        >
+        <button className="text-dark btn" form="widgetForm">
           <i className="fas fa-check" />
-        </Link>
+        </button>
       </nav>
       <main className="container">
-        <form>
+        <form id="widgetForm" onSubmit={props.update}>
           <div className="form-group">
             <label htmlFor="name">Name</label>
             <input
@@ -30,6 +29,9 @@ export default function WidgetYouTube() {
               className="form-control"
               id="name"
               placeholder="Enter widget name..."
+              name="name"
+              value={props.widget.name?props.widget.name: ""}
+              onChange={props.onChange}
             />
           </div>
           <div className="form-group">
@@ -39,6 +41,9 @@ export default function WidgetYouTube() {
               className="form-control"
               id="text"
               placeholder="Enter Widget text..."
+              name="text"
+              value={props.widget.text?props.widget.text: ""}
+              onChange={props.onChange}
             />
           </div>
           <div className="form-group">
@@ -48,6 +53,9 @@ export default function WidgetYouTube() {
               className="form-control"
               id="url"
               placeholder="Enter image address..."
+              name="url"
+              value={props.widget.url?props.widget.url: ""}
+              onChange={props.onChange}
             />
           </div>
           <div className="form-group">
@@ -58,24 +66,23 @@ export default function WidgetYouTube() {
               min={1}
               max={100}
               id="width"
+              name="width"
+              value={props.widget.width?props.widget.width: "100%"}
+              onChange={props.onChange}
             />
           </div>
-          <div className="form-group">
-            <label htmlFor="upload">Upload</label>
-            <input type="file" className="form-control" id="upload" />
-          </div>
-          <button className="btn btn-primary btn-block">Upload Image</button>
-          <Link
-            to="/user/:uid/website/:wid/page/:pid/widget"
+          <button
+            onClick={props.remove}
+            type="button"
             className="btn btn-danger btn-block"
           >
             Delete
-          </Link>
+          </button>
         </form>
       </main>
       <footer className="navbar navbar-light bg-light fixed-bottom">
         <span />
-        <Link to="/user/:uid" className="text-dark">
+        <Link to={`/user/${params.uid}`} className="text-dark">
           <i className="fas fa-user" />
         </Link>
       </footer>

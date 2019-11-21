@@ -76,6 +76,45 @@ function App() {
     { _id: "543", name: "Post 3", websiteId: "456", title: "Lorem" }
   ]);
 
+  const [widgets, setWidgets] = useState([
+    {
+      _id: "123",
+      widgetType: "HEADING",
+      pageId: "321",
+      size: "2",
+      text: "GIZMODO"
+    },
+    {
+      _id: "234",
+      widgetType: "HEADING",
+      pageId: "321",
+      size: "4",
+      text: "Lorem ipsum"
+    },
+    {
+      _id: "345",
+      widgetType: "IMAGE",
+      pageId: "321",
+      width: "100%",
+      url:
+        "https://www.gettyimages.ie/gi-resources/images/Homepage/Hero/UK/CMS_Creative_164657191_Kingfisher.jpg"
+    },
+    {
+      _id: "567",
+      widgetType: "HEADING",
+      pageId: "321",
+      size: "4",
+      text: "Lorem ipsum"
+    },
+    {
+      _id: "678",
+      widgetType: "YOUTUBE",
+      pageId: "321",
+      width: "100%",
+      url: "https://www.youtube.com/embed/X1JjPS40a-E"
+    }
+  ]);
+
   // Add a new user into users
   const addUser = user => {
     setUsers([...users, user]);
@@ -174,6 +213,43 @@ function App() {
     );
   };
 
+  // Get Widgets by page id
+  const getWidgets = pid => {
+    return widgets.filter(widget => widget.pageId === pid);
+  };
+
+  // Get Widget by widget id
+  const getWidget = wgid => {
+    for (let widget of widgets) {
+      if (widget._id === wgid) {
+        return widget;
+      }
+    }
+  };
+
+  // add Widget
+  const addWidget = newWidget => {
+    setWidgets([...widgets, newWidget]);
+  };
+
+  // remove Widget
+  const removeWidget = wgid => {
+    setWidgets(widgets.filter(widget => widget._id !== wgid));
+  };
+
+  // update Widget
+  const updateWidget = newWidget => {
+    setWidgets(
+      widgets.map(widget => {
+        if (widget._id === newWidget._id) {
+          return newWidget;
+        } else {
+          return widget;
+        }
+      })
+    );
+  };
+
   return (
     <Router>
       <Switch>
@@ -213,21 +289,19 @@ function App() {
             updatePage={updatePage}
           />
         </Route>
-        <Route
-          exact
-          path="/user/:uid/website/:wid/page/:pid/widget"
-          component={WidgetList}
-        />
-        <Route
-          exact
-          path="/user/:uid/website/:wid/page/:pid/widget/new"
-          component={WidgetChooser}
-        />
-        <Route
-          exact
-          path="/user/:uid/website/:wid/page/:pid/widget/:wgid"
-          component={WidgetEdit}
-        />
+        <Route exact path="/user/:uid/website/:wid/page/:pid/widget">
+          <WidgetList getWidgets={getWidgets} />
+        </Route>
+        <Route exact path="/user/:uid/website/:wid/page/:pid/widget/new">
+          <WidgetChooser addWidget={addWidget} />
+        </Route>
+        <Route exact path="/user/:uid/website/:wid/page/:pid/widget/:wgid">
+          <WidgetEdit
+            getWidget={getWidget}
+            removeWidget={removeWidget}
+            updateWidget={updateWidget}
+          />
+        </Route>
         <Route path="/">
           <Login users={users} />
         </Route>
