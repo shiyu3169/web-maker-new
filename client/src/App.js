@@ -19,42 +19,6 @@ import WidgetChooser from "./components/widget/WidgetChooser";
 import WidgetEdit from "./components/widget/WidgetEdit";
 
 function App() {
-  // user data
-  const [users, setUsers] = useState([
-    {
-      _id: "123",
-      username: "alice",
-      password: "alice",
-      firstName: "Alice",
-      lastName: "Wonder",
-      email: "alice@gmail.com"
-    },
-    {
-      _id: "234",
-      username: "bob",
-      password: "bob",
-      firstName: "Bob",
-      lastName: "Marley",
-      email: "bob@whatever.com"
-    },
-    {
-      _id: "345",
-      username: "charly",
-      password: "charly",
-      firstName: "Charly",
-      lastName: "Garcia",
-      email: "charly@ulem.com"
-    },
-    {
-      _id: "456",
-      username: "shiyu",
-      password: "shiyu",
-      firstName: "Shiyu",
-      lastName: "Wang",
-      email: "swang@ulem.org"
-    }
-  ]);
-
   const [websites, setWebsites] = useState([
     { _id: "123", name: "Facebook", developerId: "456", description: "Lorem" },
     { _id: "234", name: "Tweeter", developerId: "456", description: "Lorem" },
@@ -114,24 +78,6 @@ function App() {
       url: "https://www.youtube.com/embed/X1JjPS40a-E"
     }
   ]);
-
-  // Add a new user into users
-  const addUser = user => {
-    setUsers([...users, user]);
-  };
-
-  // update user by id
-  const updateUser = newUser => {
-    setUsers(
-      users.map(user => {
-        if (user._id === newUser._id) {
-          return newUser;
-        } else {
-          return user;
-        }
-      })
-    );
-  };
 
   // get websites by user id
   const getWebsites = uid => {
@@ -254,13 +200,13 @@ function App() {
     <Router>
       <Switch>
         <Route exact path="/login">
-          <Login users={users} />
+          <Login />
         </Route>
         <Route exact path="/register">
-          <Register users={users} addUser={addUser} />
+          <Register />
         </Route>
         <Route exact path="/user/:uid">
-          <Profile users={users} updateUser={updateUser} />
+          <Profile />
         </Route>
         <Route exact path="/user/:uid/website">
           <WebsiteList getWebsites={getWebsites} />
@@ -303,7 +249,7 @@ function App() {
           />
         </Route>
         <Route path="/">
-          <Login users={users} />
+          <Login />
         </Route>
       </Switch>
     </Router>

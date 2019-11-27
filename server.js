@@ -4,6 +4,12 @@ const app = express();
 
 app.use(express.json());
 
+// Define routes
+app.use("/api/user", require("./routes/user"));
+// app.use("/api/website", require("./routes/website"));
+// app.use("api/page", require("./routes/page"));
+// app.use("api/widget", require("./routes/widget"));
+
 // Serve static assets in production
 if (process.env.NODE_ENV === "production") {
   // Set static folder
