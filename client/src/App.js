@@ -19,21 +19,6 @@ import WidgetChooser from "./components/widget/WidgetChooser";
 import WidgetEdit from "./components/widget/WidgetEdit";
 
 function App() {
-  const [websites, setWebsites] = useState([
-    { _id: "123", name: "Facebook", developerId: "456", description: "Lorem" },
-    { _id: "234", name: "Tweeter", developerId: "456", description: "Lorem" },
-    { _id: "456", name: "Msimbo", developerId: "456", description: "Lorem" },
-    { _id: "890", name: "Go", developerId: "123", description: "Lorem" },
-    {
-      _id: "567",
-      name: "Tic Tac Toe",
-      developerId: "123",
-      description: "Lorem"
-    },
-    { _id: "678", name: "Checkers", developerId: "123", description: "Lorem" },
-    { _id: "789", name: "Chess", developerId: "234", description: "Lorem" }
-  ]);
-
   const [pages, setPages] = useState([
     { _id: "321", name: "Post 1", websiteId: "456", title: "Lorem" },
     { _id: "432", name: "Post 2", websiteId: "456", title: "Lorem" },
@@ -78,49 +63,6 @@ function App() {
       url: "https://www.youtube.com/embed/X1JjPS40a-E"
     }
   ]);
-
-  // get websites by user id
-  const getWebsites = uid => {
-    const curWebs = [];
-    for (let website of websites) {
-      if (website.developerId === uid) {
-        curWebs.push(website);
-      }
-    }
-    return curWebs;
-  };
-
-  // getWebsite
-  const getWebsite = wid => {
-    for (let website of websites) {
-      if (website._id === wid) {
-        return website;
-      }
-    }
-  };
-
-  // add new website
-  const addWebsite = newWeb => {
-    setWebsites([...websites, newWeb]);
-  };
-
-  // remove website
-  const removeWebsite = wid => {
-    setWebsites(websites.filter(website => website._id !== wid));
-  };
-
-  // update website
-  const updateWebsite = newWeb => {
-    setWebsites(
-      websites.map(website => {
-        if (website._id === newWeb._id) {
-          return newWeb;
-        } else {
-          return website;
-        }
-      })
-    );
-  };
 
   // get pages by website id
   const getPages = wid => {
@@ -209,18 +151,13 @@ function App() {
           <Profile />
         </Route>
         <Route exact path="/user/:uid/website">
-          <WebsiteList getWebsites={getWebsites} />
+          <WebsiteList />
         </Route>
         <Route exact path="/user/:uid/website/new">
-          <WebsiteNew getWebsites={getWebsites} addWebsite={addWebsite} />
+          <WebsiteNew />
         </Route>
         <Route exact path="/user/:uid/website/:wid">
-          <WebsiteEdit
-            getWebsites={getWebsites}
-            getWebsite={getWebsite}
-            removeWebsite={removeWebsite}
-            updateWebsite={updateWebsite}
-          />
+          <WebsiteEdit />
         </Route>
         <Route exact path="/user/:uid/website/:wid/page">
           <PageList getPages={getPages} />

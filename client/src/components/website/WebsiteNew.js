@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams, useHistory } from "react-router-dom";
 import uuid from "uuid";
+import axios from "axios";
 
 export default function WebsiteNew(props) {
   const params = useParams();
@@ -12,10 +13,16 @@ export default function WebsiteNew(props) {
   const [description, setDescription] = useState("");
 
   useEffect(() => {
-    setWebsites(props.getWebsites(params.uid));
-  }, [params.uid, props]);
+    getWebsites();
+    // eslint-disable-next-line
+  }, []);
 
-  const submit = e => {
+  const getWebsites = async () => {
+    const res = await axios.get(`/api/website/user/${params.uid}`);
+    setWebsites(res.data);
+  };
+
+  const submit = async e => {
     e.preventDefault();
     const newWeb = {
       _id: uuid.v4(),
@@ -23,7 +30,7 @@ export default function WebsiteNew(props) {
       description: description,
       developerId: params.uid
     };
-    props.addWebsite(newWeb);
+    await axios.post("/api/website", newWeb);
     history.push(`/user/${params.uid}/website`);
   };
 

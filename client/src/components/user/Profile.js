@@ -23,7 +23,8 @@ export default function Profile(props) {
 
   useEffect(() => {
     getUser();
-  }, [getUser]);
+    //eslint-disable-next-line
+  }, []);
 
   const update = async () => {
     const newUser = {

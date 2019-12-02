@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import axios from "axios";
 
 export default function WebsiteList(props) {
   const params = useParams();
@@ -7,8 +8,14 @@ export default function WebsiteList(props) {
   const [websites, setWebsites] = useState([]);
 
   useEffect(() => {
-    setWebsites(props.getWebsites(params.uid));
-  }, [params.uid, props]);
+    getWebsites();
+    // eslint-disable-next-line
+  }, []);
+
+  const getWebsites = async () => {
+    const res = await axios.get(`/api/website/user/${params.uid}`);
+    setWebsites(res.data);
+  };
 
   return (
     <div>
