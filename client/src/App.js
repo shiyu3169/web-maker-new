@@ -19,12 +19,6 @@ import WidgetChooser from "./components/widget/WidgetChooser";
 import WidgetEdit from "./components/widget/WidgetEdit";
 
 function App() {
-  const [pages, setPages] = useState([
-    { _id: "321", name: "Post 1", websiteId: "456", title: "Lorem" },
-    { _id: "432", name: "Post 2", websiteId: "456", title: "Lorem" },
-    { _id: "543", name: "Post 3", websiteId: "456", title: "Lorem" }
-  ]);
-
   const [widgets, setWidgets] = useState([
     {
       _id: "123",
@@ -63,43 +57,6 @@ function App() {
       url: "https://www.youtube.com/embed/X1JjPS40a-E"
     }
   ]);
-
-  // get pages by website id
-  const getPages = wid => {
-    return pages.filter(page => page.websiteId === wid);
-  };
-
-  // add new page into pages
-  const addPage = newPage => {
-    setPages([...pages, newPage]);
-  };
-
-  // get page by pid
-  const getPage = pid => {
-    for (let page of pages) {
-      if (page._id === pid) {
-        return page;
-      }
-    }
-  };
-
-  // remove Page by pid
-  const removePage = pid => {
-    setPages(pages.filter(page => page._id !== pid));
-  };
-
-  // update page
-  const updatePage = newPage => {
-    setPages(
-      pages.map(page => {
-        if (page._id === newPage._id) {
-          return newPage;
-        } else {
-          return page;
-        }
-      })
-    );
-  };
 
   // Get Widgets by page id
   const getWidgets = pid => {
@@ -160,17 +117,13 @@ function App() {
           <WebsiteEdit />
         </Route>
         <Route exact path="/user/:uid/website/:wid/page">
-          <PageList getPages={getPages} />
+          <PageList />
         </Route>
         <Route exact path="/user/:uid/website/:wid/page/new">
-          <PageNew addPage={addPage} />
+          <PageNew />
         </Route>
         <Route exact path="/user/:uid/website/:wid/page/:pid">
-          <PageEdit
-            getPage={getPage}
-            removePage={removePage}
-            updatePage={updatePage}
-          />
+          <PageEdit />
         </Route>
         <Route exact path="/user/:uid/website/:wid/page/:pid/widget">
           <WidgetList getWidgets={getWidgets} />
