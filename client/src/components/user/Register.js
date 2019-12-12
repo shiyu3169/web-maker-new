@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import uuid from "uuid";
 import axios from "axios";
 
 export default function Register(props) {
@@ -25,7 +24,6 @@ export default function Register(props) {
     }
     // Add new user into users
     const newUser = {
-      _id: uuid.v4(),
       username: username,
       password: password,
       firstName: "",
@@ -33,6 +31,7 @@ export default function Register(props) {
       email: ""
     };
     await axios.post("/api/user", newUser);
+    console.log(newUser);
     // Navigate user into his profile
     history.push(`/user/${newUser._id}`);
   };
