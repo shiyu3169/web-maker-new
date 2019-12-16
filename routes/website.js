@@ -2,16 +2,6 @@ const express = require("express");
 const router = express.Router();
 const Website = require("../models/Website");
 
-const websites = [
-  { _id: "123", name: "Facebook", developerId: "456", description: "Lorem" },
-  { _id: "234", name: "Tweeter", developerId: "456", description: "Lorem" },
-  { _id: "456", name: "Msimbo", developerId: "456", description: "Lorem" },
-  { _id: "890", name: "Go", developerId: "123", description: "Lorem" },
-  { _id: "567", name: "Tic Tac Toe", developerId: "123", description: "Lorem" },
-  { _id: "678", name: "Checkers", developerId: "123", description: "Lorem" },
-  { _id: "789", name: "Chess", developerId: "234", description: "Lorem" }
-];
-
 // Create new website
 router.post("/", async (req, res) => {
   const newWebsite = new Website({ ...req.body });
@@ -44,7 +34,7 @@ router.put("/", async (req, res) => {
 router.delete("/:wid", async (req, res) => {
   const wid = req.params.wid;
   await Website.findByIdAndRemove(wid);
-  res.json(websites);
+  res.json(null);
 });
 
 module.exports = router;

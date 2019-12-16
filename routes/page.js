@@ -1,63 +1,40 @@
 const express = require("express");
 const router = express.Router();
-
-const pages = [
-  { _id: "321", name: "Post 1", websiteId: "456", title: "Lorem" },
-  { _id: "432", name: "Post 2", websiteId: "456", title: "Lorem" },
-  { _id: "543", name: "Post 3", websiteId: "456", title: "Lorem" }
-];
+const Page = require("../models/Page");
 
 // Create new page
-router.post("/", (req, res) => {
-  const newPage = req.body;
-  pages.push(newPage);
-  res.json(newPage);
+router.post("/", async (req, res) => {
+  const newPage = new Page({ ...req.body });
+  const page = await newPage.save();
+  res.json(page);
 });
 
 // Get all pages by given website id
-router.get("/website/:wid", (req, res) => {
+router.get("/website/:wid", async (req, res) => {
   const wid = req.params.wid;
-  const currentPages = [];
-  for (let i = 0; i < pages.length; i++) {
-    if (pages[i].websiteId === wid) {
-      currentPages.push(pages[i]);
-    }
-  }
+  currentPages = await Page.find({ websiteId: wid });
   res.json(currentPages);
 });
 
 // get page by given id
-router.get("/:pid", (req, res) => {
+router.get("/:pid", async (req, res) => {
   const pid = req.params.pid;
-  let page = null;
-  for (let i = 0; i < pages.length; i++) {
-    if (pages[i]._id === pid) {
-      page = pages[i];
-    }
-  }
+  page = await Page.findById(pid);
   res.json(page);
 });
 
 // Update page
-router.put("/", (req, res) => {
+router.put("/", async (req, res) => {
   const newPage = req.body;
-  for (let i = 0; i < pages.length; i++) {
-    if (pages[i]._id === newPage._id) {
-      pages[i] = newPage;
-    }
-  }
+  await Page.findByIdAndUpdate(newPage._id, newPage);
   res.json(newPage);
 });
 
 // Delete page
-router.delete("/:pid", (req, res) => {
+router.delete("/:pid", async (req, res) => {
   const pid = req.params.pid;
-  for (let i = 0; i < pages.length; i++) {
-    if (pages[i]._id === pid) {
-      pages.splice(i, 1);
-    }
-  }
-  res.json(pages);
+  await Page.findByIdAndRemove(pid);
+  res.json(null);
 });
 
 module.exports = router;
