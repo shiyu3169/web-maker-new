@@ -18,7 +18,7 @@ export default function Register(props) {
     }
     // Check if username is taken
     const res = await axios.get(`/api/user?username=${username}`);
-    if (res.data) {
+    if (res.data.length > 0) {
       alert("Username is taken, please try another one");
       return;
     }
@@ -32,7 +32,7 @@ export default function Register(props) {
     };
     const res2 = await axios.post("/api/user", newUser);
     // Navigate user into his profile
-    history.push(`/user/${res2.data._id}`);
+    history.push(`/user/${res2.data.insertId}`);
   };
 
   return (

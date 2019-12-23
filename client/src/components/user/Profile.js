@@ -13,12 +13,12 @@ export default function Profile(props) {
 
   const getUser = async () => {
     const res = await axios.get(`/api/user/${params.uid}`);
-    const user = res.data;
-    setUsername(user.username);
-    setEmail(user.email);
-    setFirstName(user.firstName);
-    setLastName(user.lastName);
-    setPassword(user.password);
+    const users = res.data;
+    setUsername(users[0].username);
+    setEmail(users[0].email);
+    setFirstName(users[0].first_name);
+    setLastName(users[0].last_name);
+    setPassword(users[0].password);
   };
 
   useEffect(() => {
@@ -28,7 +28,7 @@ export default function Profile(props) {
 
   const update = async () => {
     const newUser = {
-      _id: params.uid,
+      id: params.uid,
       username: username,
       password: password,
       email: email,
