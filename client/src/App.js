@@ -17,6 +17,8 @@ import PageEdit from "./components/page/PageEdit";
 import WidgetList from "./components/widget/WidgetList";
 import WidgetChooser from "./components/widget/WidgetChooser";
 import WidgetEdit from "./components/widget/WidgetEdit";
+// Routing components
+import PrivateRoute from "./components/routing/PrivateRoute";
 
 function App() {
   return (
@@ -28,18 +30,18 @@ function App() {
         <Route exact path="/register">
           <Register />
         </Route>
-        <Route exact path="/user/:uid">
+        <PrivateRoute exact path="/user/:uid">
           <Profile />
-        </Route>
-        <Route exact path="/user/:uid/website">
+        </PrivateRoute>
+        <PrivateRoute exact path="/user/:uid/website">
           <WebsiteList />
-        </Route>
-        <Route exact path="/user/:uid/website/new">
+        </PrivateRoute>
+        <PrivateRoute exact path="/user/:uid/website/new">
           <WebsiteNew />
-        </Route>
-        <Route exact path="/user/:uid/website/:wid">
+        </PrivateRoute>
+        <PrivateRoute exact path="/user/:uid/website/:wid">
           <WebsiteEdit />
-        </Route>
+        </PrivateRoute>
         <Route exact path="/user/:uid/website/:wid/page">
           <PageList />
         </Route>

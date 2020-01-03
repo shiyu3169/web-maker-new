@@ -1,29 +1,67 @@
 const express = require("express");
 const router = express.Router();
-
+const jwt = require("jsonwebtoken");
 const User = require("../models/User");
+const config = require("config");
+const auth = require("../middleware/auth");
 
-// Find user by credentials
-router.get("/", async (req, res) => {
-  // get username and password
-  const username = req.query.username;
-  const password = req.query.password;
-  let user;
-  // if username and password are sent from client
-  if (username && password) {
-    user = await User.findOne({ username: username, password: password });
-    // if the username is taken
-  } else if (username) {
-    user = await User.findOne({ username: username });
-  }
+// Login
+router.post("/login", async (req, res) => {
+  const { username, password } = req.body;
+  let user = await User.findOne({ username: username, password: password });
 
-  // if user is not existing
   if (!user) {
-    user = null;
+    res.json(null);
+  } else {
+    const payload = {
+      user: {
+        id: user.id
+      }
+    };
+
+    jwt.sign(
+      payload,
+      config.get("jwtSecret"),
+      {
+        expiresIn: "1d"
+      },
+      (error, token) => {
+        if (error) {
+          throw error;
+        }
+        res.json({ token, user });
+      }
+    );
   }
-  // send user back to client
+});
+
+// Load user
+router.get("/load", auth, async (req, res) => {
+  const user = await User.findById(req.user.id);
   res.json(user);
 });
+
+// // Find user by credentials
+// router.get("/", async (req, res) => {
+//   // get username and password
+//   const username = req.query.username;
+//   const password = req.query.password;
+//   let user;
+//   // if username and password are sent from client
+//   if (username && password) {
+//     user = await User.findOne({ username: username, password: password });
+//     // if the username is taken
+//   } else if (username) {
+//     user = await User.findOne({ username: username });
+//   }
+
+//   // if user is not existing
+//   if (!user) {
+//     user = null;
+//   }
+//   // send user back to client
+//   res.json(user);
+// });
 
 // Create new user
 router.post("/", async (req, res) => {
