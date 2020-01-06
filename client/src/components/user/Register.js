@@ -22,7 +22,7 @@ export default function Register(props) {
       alert("Username is taken, please try another one");
       return;
     }
-    // Add new user into users
+    // Add new user into database
     const newUser = {
       username: username,
       password: password,
@@ -30,9 +30,10 @@ export default function Register(props) {
       lastName: "",
       email: ""
     };
-    const res2 = await axios.post("/api/user", newUser);
+    const res2 = await axios.post("/api/user/register", newUser);
+    localStorage.setItem("token", res2.data.token);
     // Navigate user into his profile
-    history.push(`/user/${res2.data._id}`);
+    history.push(`/user/${res2.data.user._id}`);
   };
 
   return (
