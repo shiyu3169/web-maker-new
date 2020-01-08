@@ -4,15 +4,21 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const config = require("config");
 const auth = require("../middleware/auth");
+const bcrypt = require("bcryptjs");
 
 // Login
 router.post("/login", async (req, res) => {
   const { username, password } = req.body;
-  let user = await User.findOne({ username: username, password: password });
-
+  // check if username is correct
+  let user = await User.findOne({ username: username });
   if (!user) {
     res.json(null);
   } else {
+    // Validate password
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      res.json(null);
+    }
     const payload = {
       user: {
         id: user.id
@@ -57,25 +63,37 @@ router.get("/", async (req, res) => {
 // Create new user
 router.post("/register", async (req, res) => {
   const newUser = new User({ ...req.body });
-  const user = await newUser.save();
-  const payload = {
-    user: {
-      id: user.id
+  // Create salt & hash
+  bcrypt.genSalt(10, (err, salt) => {
+    if (err) {
+      throw err;
     }
-  };
-  jwt.sign(
-    payload,
-    config.get("jwtSecret"),
-    {
-      expiresIn: "1d"
-    },
-    (err, token) => {
+    bcrypt.hash(newUser.password, salt, async (err, hash) => {
       if (err) {
         throw err;
       }
-      res.json({ token, user });
-    }
-  );
+      newUser.password = hash;
+      const user = await newUser.save();
+      const payload = {
+        user: {
+          id: user.id
+        }
+      };
+      jwt.sign(
+        payload,
+        config.get("jwtSecret"),
+        {
+          expiresIn: "1d"
+        },
+        (err, token) => {
+          if (err) {
+            throw err;
+          }
+          res.json({ token, user });
+        }
+      );
+    });
+  });
 });
 
 // Find user by id
