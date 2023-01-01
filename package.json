@@ -22,7 +22,7 @@
   "homepage": "https://github.com/shiyu3169/web-maker-new#readme",
   "dependencies": {
     "bcryptjs": "^2.4.3",
-    "config": "^3.2.4",
+    "config": "^3.3.8",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.8.0",
